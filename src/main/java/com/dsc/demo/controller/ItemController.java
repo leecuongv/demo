@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.dsc.demo.model.Item;
 import com.dsc.demo.repository.InMemoryItemRepository;
 
+
 @RestController
 @RequestMapping("/api/items")
 public class ItemController {
@@ -27,6 +28,14 @@ public class ItemController {
     public ItemController(InMemoryItemRepository repository) {
         this.repository = repository;
     }
+
+    @GetMapping("/{id}")
+    public String getMethodName(@PathVariable Long id) {
+        Item item = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Item not found"));
+        return "Item ID: " + item.getId() + ", Name: " + item.getName();
+    }
+    
 
     @GetMapping
     public List<Item> list() {
